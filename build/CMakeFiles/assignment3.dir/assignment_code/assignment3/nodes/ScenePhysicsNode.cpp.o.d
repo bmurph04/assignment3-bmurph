@@ -419,4 +419,22 @@ CMakeFiles/assignment3.dir/assignment_code/assignment3/nodes/ScenePhysicsNode.cp
  /home/bmurph/workspaces/64400/assignment3/assignment_code/assignment3/integrators/IntegratorFactory.hpp \
  /home/bmurph/workspaces/64400/assignment3/assignment_code/assignment3/integrators/ForwardEulerIntegrator.hpp \
  /home/bmurph/workspaces/64400/assignment3/assignment_code/assignment3/integrators/TrapezoidalIntegrator.hpp \
- /home/bmurph/workspaces/64400/assignment3/assignment_code/assignment3/integrators/RK4Integrator.hpp
+ /home/bmurph/workspaces/64400/assignment3/assignment_code/assignment3/integrators/RK4Integrator.hpp \
+ /home/bmurph/workspaces/64400/assignment3/external/src/glm-0.9.9.8/glm/gtx/string_cast.hpp \
+ /home/bmurph/workspaces/64400/assignment3/external/src/glm-0.9.9.8/glm/gtc/type_precision.hpp \
+ /home/bmurph/workspaces/64400/assignment3/external/src/glm-0.9.9.8/glm/gtc/vec1.hpp \
+ /home/bmurph/workspaces/64400/assignment3/external/src/glm-0.9.9.8/glm/ext/vector_bool1.hpp \
+ /home/bmurph/workspaces/64400/assignment3/external/src/glm-0.9.9.8/glm/ext/vector_bool1_precision.hpp \
+ /home/bmurph/workspaces/64400/assignment3/external/src/glm-0.9.9.8/glm/ext/vector_float1.hpp \
+ /home/bmurph/workspaces/64400/assignment3/external/src/glm-0.9.9.8/glm/ext/vector_float1_precision.hpp \
+ /home/bmurph/workspaces/64400/assignment3/external/src/glm-0.9.9.8/glm/ext/vector_double1.hpp \
+ /home/bmurph/workspaces/64400/assignment3/external/src/glm-0.9.9.8/glm/ext/vector_double1_precision.hpp \
+ /home/bmurph/workspaces/64400/assignment3/external/src/glm-0.9.9.8/glm/ext/vector_int1.hpp \
+ /home/bmurph/workspaces/64400/assignment3/external/src/glm-0.9.9.8/glm/ext/vector_int1_sized.hpp \
+ /home/bmurph/workspaces/64400/assignment3/external/src/glm-0.9.9.8/glm/ext/vector_uint1.hpp \
+ /home/bmurph/workspaces/64400/assignment3/external/src/glm-0.9.9.8/glm/ext/vector_uint1_sized.hpp \
+ /home/bmurph/workspaces/64400/assignment3/external/src/glm-0.9.9.8/glm/gtc/type_precision.inl \
+ /home/bmurph/workspaces/64400/assignment3/external/src/glm-0.9.9.8/glm/gtx/dual_quaternion.hpp \
+ /home/bmurph/workspaces/64400/assignment3/external/src/glm-0.9.9.8/glm/gtx/dual_quaternion.inl \
+ /home/bmurph/workspaces/64400/assignment3/external/src/glm-0.9.9.8/glm/gtx/string_cast.inl \
+ /usr/include/c++/13/cstdarg

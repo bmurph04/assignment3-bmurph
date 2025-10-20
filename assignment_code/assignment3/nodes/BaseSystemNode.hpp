@@ -21,7 +21,7 @@ class BaseSystemNode : public SceneNode {
         void InitializeSystem();
         void InitializeState();        
 
-    private:
+    protected:
         std::unique_ptr<ParticleSystemBase> system_;
         ParticleSystemBase* system_raw_;
         ParticleState state_;

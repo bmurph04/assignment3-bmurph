@@ -25,13 +25,6 @@ class SimpleNode : public BaseSystemNode {
         std::shared_ptr<VertexObject> sphere_mesh_;
         std::shared_ptr<ShaderProgram> shader_;
 
-        std::unique_ptr<SimpleSystem> system_;
-        SimpleSystem* system_raw_;
-
-        ParticleState state_;
-
-
-
 };
 
 } // namespace GLOO

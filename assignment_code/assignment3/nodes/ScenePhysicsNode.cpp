@@ -46,12 +46,9 @@ void ScenePhysicsNode::InitializeSystemNodes() {
 
 void ScenePhysicsNode::Update(double delta_time) {
     time_since_start_ += delta_time;
-    if (time_since_start_ < step_) return;
-
     // Update each system attached to the node
     for (BaseSystemNode* system_node : system_nodes_) {
         ParticleSystemBase* system = system_node->GetSystem();
-        assert(system != nullptr);
         ParticleState state = system_node->GetState();
         
         ParticleState new_state = integrator_->Integrate(*system, state, time_since_start_, step_);
