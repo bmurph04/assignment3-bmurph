@@ -1,0 +1,9 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/bmurph/workspaces/64400/assignment3/build/cmake_install.cmake",
+		"/home/bmurph/workspaces/64400/assignment3/build/external/src/glfw-3.3.2/cmake_install.cmake",
+		"/home/bmurph/workspaces/64400/assignment3/build/external/src/glfw-3.3.2/src/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
