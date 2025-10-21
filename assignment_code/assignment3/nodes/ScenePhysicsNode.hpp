@@ -15,7 +15,7 @@ namespace GLOO {
 // Create derived SceneNode that handles state, integrator, and physical system
 class ScenePhysicsNode : public SceneNode {
     public:
-        ScenePhysicsNode(IntegratorType integrator_type, float step, double time_since_update);
+        ScenePhysicsNode(IntegratorType integrator_type, float step, double time_since_update, double time_accumulated);
         
         void InitializeSystemNodes();
 
@@ -27,6 +27,7 @@ class ScenePhysicsNode : public SceneNode {
         float step_;
 
         double time_since_start_;
+        double time_accumulated_;
 };
 
 } // namespace GLOO

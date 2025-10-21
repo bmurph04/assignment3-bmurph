@@ -21,7 +21,8 @@
 
 namespace GLOO {
 
-ScenePhysicsNode::ScenePhysicsNode(IntegratorType integrator_type, float step, double time_since_update) : SceneNode(), step_(step), time_since_start_(time_since_update) {
+ScenePhysicsNode::ScenePhysicsNode(IntegratorType integrator_type, float step, double time_since_update, double time_accumulated) 
+    : SceneNode(), step_(step), time_since_start_(time_since_update), time_accumulated_(time_accumulated) {
     
     integrator_ = IntegratorFactory::CreateIntegrator<ParticleSystemBase, ParticleState>(integrator_type);
     
@@ -44,16 +45,27 @@ void ScenePhysicsNode::InitializeSystemNodes() {
     // this->AddChild(std::move(cloth_node));
 }
 
-void ScenePhysicsNode::Update(double delta_time) {
+void ScenePhysicsNode::Update(double delta_time) { 
     time_since_start_ += delta_time;
+    
+    while (time_accumulated_ < time_since_start_){
+        float start_time = time_accumulated_;
+        
+        // Update each state attached to the node
+        for (BaseSystemNode* system_node : system_nodes_) {
+            ParticleSystemBase* system = system_node->GetSystem();
+            ParticleState state = system_node->GetState();
+            
+            ParticleState new_state = integrator_->Integrate(*system, state, start_time, step_);
+            
+            system_node->SetState(new_state);
+        }
+
+        time_accumulated_ += step_;
+    }
+    
     // Update each system attached to the node
     for (BaseSystemNode* system_node : system_nodes_) {
-        ParticleSystemBase* system = system_node->GetSystem();
-        ParticleState state = system_node->GetState();
-        
-        ParticleState new_state = integrator_->Integrate(*system, state, time_since_start_, step_);
-        
-        system_node->SetState(new_state);
         system_node->Update(delta_time);
     }
 }

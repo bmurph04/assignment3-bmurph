@@ -54,7 +54,7 @@ void SimulationApp::SetupScene() {
   root.AddChild(std::move(point_light_node));
 
   // Create derived SceneNode that handles state, integrator, and physical system
-  auto scene_physics_node = make_unique<ScenePhysicsNode>(integrator_type_, integration_step_, 0.0f);
+  auto scene_physics_node = make_unique<ScenePhysicsNode>(integrator_type_, integration_step_, 0.0f, 0.0f);
   // Add node to the root
   root.AddChild(std::move(scene_physics_node));
   
