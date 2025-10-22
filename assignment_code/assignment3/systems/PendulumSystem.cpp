@@ -1,26 +1,15 @@
 #include "PendulumSystem.hpp"
 
 #include "objects/PendulumParticle.hpp"
+#include "objects/PendulumSpring.hpp"
+
+#include <utils.hpp>
 
 namespace GLOO {
 
-PendulumSystem::PendulumSystem(int num_particles) : num_particles_(num_particles){
-    // Initialize particles in pendulum system, reachable by index
-    for (int i = 0; i < num_particles; i++){
-        // Call CreatePendulumParticle
-    }
+PendulumSystem::PendulumSystem() { }
 
-    
-
-}
-
-PendulumSystem::~PendulumSystem() {
-
-}
-
-PendulumSystem::CreatePendulumParticle(float mass, PendulumParticle* parent = nullptr, float position = glm::vec3(0.0f), bool fixed = false) {
-    // Don't create spring and attach to parent if parent is nullptr (root). Also, make sure fixed is set to true for particle
-}
+PendulumSystem::~PendulumSystem() { }
 
 // implementation of time derivative dX(t)/dt = f(X(t), t) for pendulum 
 ParticleState PendulumSystem::ComputeTimeDerivative(const ParticleState& state, float time) const {

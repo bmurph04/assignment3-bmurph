@@ -19,6 +19,8 @@ class PendulumNode : public BaseSystemNode {
 
         void InitializeState();
         void InitializeSystem();
+
+        void ExtendPendulum(float mass, glm::vec3 position, glm::vec3 velocity, bool fixed = false);
     
     private:
         std::vector<SceneNode*> particle_nodes;

@@ -3,7 +3,10 @@
 
 #include "ParticleSystemBase.hpp"
 #include "ParticleState.hpp"
+#include "PendulumParticle.hpp"
+#include "PendulumSpring.hpp"
 
+#include <utils.hpp>
 #include <glm/glm.hpp>
 
 namespace GLOO {
@@ -14,13 +17,13 @@ class PendulumSystem : public ParticleSystemBase {
 
         int GetNumParticles() const { return num_particles_; }
 
-        void CreatePendulumParticle(float mass, PendulumParticle* parent = nullptr, float position = glm::vec3(0.0f), bool fixed = false);
-
         ParticleState ComputeTimeDerivative(const ParticleState& state, float time) const override;
         ParticleState ComputeAcceleration();
 
     private:
         int num_particles_;
+        std::vector<PendulumParticle> particles_;
+        std::vector<PendulumSpring> springs_;
 
 };
 } // namespace GLOO
