@@ -14,11 +14,13 @@ namespace GLOO {
 class PendulumNode : public BaseSystemNode { 
     // SceneNode contianing system and state information for pendulum system
     public:
-        PendulumNode();
+        PendulumNode(int num_particles);
         void Update(double delta_time) override;
+
+        void InitializeState();
     
     private:
-        std::vector<SceneNode*> sphere_nodes;
+        std::vector<SceneNode*> particle_nodes;
         std::shared_ptr<VertexObject> sphere_mesh_;
         std::shared_ptr<ShaderProgram> shader_;
 
