@@ -11,7 +11,6 @@ SimpleNode::SimpleNode() {
 
     // Initialize the system for the simple node
     system_ = make_unique<SimpleSystem>();
-    system_raw_ = system_.get();
 
     // Create geometry
     sphere_mesh_ = PrimitiveFactory::CreateSphere(0.2f, 25, 25);
