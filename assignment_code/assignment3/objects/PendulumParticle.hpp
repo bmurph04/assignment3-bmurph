@@ -8,10 +8,9 @@
 namespace GLOO{
 
 struct PendulumParticle {
-   // Holds information about a particle's mass, attached springs, and whether its fixed or not
+   // Holds information about a particle's mass and whether its fixed or not
    float mass;
    bool fixed;
-   std::vector<PendulumSpring> springs;
 }
 
 } // namespace GLOO
