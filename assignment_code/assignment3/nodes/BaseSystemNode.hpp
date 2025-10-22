@@ -18,7 +18,6 @@ class BaseSystemNode : public SceneNode {
         ParticleState GetState() const { return state_; }
         void SetState(ParticleState state) { state_ = state; }
 
-        void InitializeSystem();
         void InitializeState();        
 
     protected:

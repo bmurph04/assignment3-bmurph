@@ -17,11 +17,9 @@ class SimpleNode : public BaseSystemNode {
         SimpleNode();
         void Update(double delta_time) override;
 
-        void InitializeSystem();
         void InitializeState();        
 
     private:
-        //SceneNode* sphere_node_;
         std::shared_ptr<VertexObject> sphere_mesh_;
         std::shared_ptr<ShaderProgram> shader_;
 

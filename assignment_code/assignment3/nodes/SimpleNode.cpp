@@ -9,7 +9,7 @@ namespace GLOO {
 
 SimpleNode::SimpleNode() {
 
-    // Initialize the system and state for the simple node
+    // Initialize the system for the simple node
     system_ = make_unique<SimpleSystem>();
     system_raw_ = system_.get();
 
@@ -34,7 +34,6 @@ void SimpleNode::InitializeState() {
     sphere_node->CreateComponent<RenderingComponent>(sphere_mesh_);
     sphere_node->GetTransform().SetPosition(this->GetTransform().GetPosition());
 
-    //sphere_node_ = sphere_node.get();
     this->AddChild(std::move(sphere_node));
 
     glm::vec3 position = glm::vec3(0.5f, 0.75f, 0.5f);
