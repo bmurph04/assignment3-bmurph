@@ -8,6 +8,8 @@ struct PendulumSpring {
     size_t p2_idx; // Index of the second particle
     float k;
     float r;
-}
+};
 
 }
+
+#endif

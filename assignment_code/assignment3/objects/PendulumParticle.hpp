@@ -11,6 +11,8 @@ struct PendulumParticle {
    // Holds information about a particle's mass and whether its fixed or not
    float mass;
    bool fixed;
-}
+};
 
 } // namespace GLOO
+
+#endif

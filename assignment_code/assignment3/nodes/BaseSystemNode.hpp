@@ -1,7 +1,7 @@
 #ifndef BASE_SYSTEM_NODE_H_
 #define BASE_SYSTEM_NODE_H_
 
-#include "systems/SimpleSystem.hpp"
+#include "systems/ParticleSystemBase.hpp"
 #include "ParticleState.hpp"
 
 #include "gloo/SceneNode.hpp"
@@ -13,14 +13,13 @@ namespace GLOO {
 class BaseSystemNode : public SceneNode {
     // SceneNode containing system and state information for simple system
     public:
-        void Update(double delta_time) override;
-        ParticleSystemBase* GetSystem() const { return system_; }
+        ParticleSystemBase* GetSystem() const { return system_.get(); }
 
         ParticleState GetState() const { return state_; }
         void SetState(ParticleState state) { state_ = state; }
 
-        virtual void InitializeSystem();
-        virtual void InitializeState();        
+        virtual void InitializeSystem() = 0;
+        virtual void InitializeState() = 0;        
 
     protected:
         std::unique_ptr<ParticleSystemBase> system_;

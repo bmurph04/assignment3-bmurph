@@ -9,27 +9,27 @@
 
 namespace GLOO {
 
-PendulumNode::PendulumNode(int num_particles) { 
+PendulumNode::PendulumNode(size_t num_particles) : num_particles_(num_particles){ 
 
     // Initialize the system for the pendulum node
-    system_ = make_unique<PendulumSystem>(num_particles);
+    system_ = make_unique<PendulumSystem>();
 
     // Create geometry
     sphere_mesh_ = PrimitiveFactory::CreateSphere(0.2f, 25, 25);
     shader_ = std::make_shared<PhongShader>();
 
-    InitializeSystem(num_particles);
-    InitializeState(num_particles);
+    InitializeSystem();
+    InitializeState();
 
 }
 
-void PendulumNode::InitializeSystem(int num_particles) {
+void PendulumNode::InitializeSystem() {
     // Initialize particles in pendulum system with default properties, reachable by index
     float mass = 1;
     float k = 0.5;
     float r = 0.5;
 
-    for (int i = 0; i < num_particles; i++){
+    for (size_t i = 0; i < num_particles_; i++){
         // If at root, just create first root particle and set fixed to true
         if (i == 0){
             auto root_particle = PendulumParticle{mass, true};
@@ -38,25 +38,25 @@ void PendulumNode::InitializeSystem(int num_particles) {
         }
         else {
             // Call ExtendPendulum
-            ExtendPendulum(mass, position, velocity);
+            // ExtendPendulum(mass, position, velocity);
         }
 
-        position.y -= 5.0f;
+        // position.y -= 5.0f;
     }
 
 }
 
-void PendulumNode::InitializeState(float num_particles) {
+void PendulumNode::InitializeState() {
     // Initialize the state for the pendulum node
 
     // vector of size num_particles for the particles in the system
-    std::vector<glm::vec3> state_positions(num_particles);
-    std::vector<glm::vec3> state_velocities(num_particles);
+    std::vector<glm::vec3> state_positions(num_particles_);
+    std::vector<glm::vec3> state_velocities(num_particles_);
 
     glm::vec3 position(-10.0f, 0.0f, 0.0f);
     glm::vec3 velocity(0.5f, 0.0f, -0.5f);
 
-    for (int i = 0; i < num_particles; i++) {
+    for (size_t i = 0; i < num_particles_; i++) {
         state_positions.at(i) = position;
         state_positions.at(i) = velocity;
 
@@ -68,7 +68,7 @@ void PendulumNode::InitializeState(float num_particles) {
 
 }
 
-void PendulumSystem::ExtendPendulum(float mass, float position, float velocity, bool fixed = false) {
+void PendulumNode::ExtendPendulum(float mass, glm::vec3 position, glm::vec3 velocity, bool fixed) {
     // // Assuming a linear chain as in the sample solution where each particle has at most one parent and one child.
 
     // // Create a particle

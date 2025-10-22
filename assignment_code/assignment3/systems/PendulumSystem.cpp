@@ -3,13 +3,9 @@
 #include "objects/PendulumParticle.hpp"
 #include "objects/PendulumSpring.hpp"
 
-#include <utils.hpp>
-
 namespace GLOO {
 
 PendulumSystem::PendulumSystem() { }
-
-PendulumSystem::~PendulumSystem() { }
 
 // implementation of time derivative dX(t)/dt = f(X(t), t) for pendulum 
 ParticleState PendulumSystem::ComputeTimeDerivative(const ParticleState& state, float time) const {
@@ -27,8 +23,8 @@ ParticleState PendulumSystem::ComputeTimeDerivative(const ParticleState& state, 
     return new_state;
 }
 
-ParticleState PendulumSystem::ComputeAcceleration() {
-}
+// ParticleState PendulumSystem::ComputeAcceleration() {
+// }
 
 
 }

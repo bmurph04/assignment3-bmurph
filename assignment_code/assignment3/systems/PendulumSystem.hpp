@@ -1,29 +1,20 @@
 #ifndef PENDULUM_SYSTEM_H_
 #define PENDULUM_SYSTEM_H_
 
-#include "ParticleSystemBase.hpp"
+#include "systems/ParticleSystemBase.hpp"
 #include "ParticleState.hpp"
-#include "PendulumParticle.hpp"
-#include "PendulumSpring.hpp"
+#include "objects/PendulumParticle.hpp"
+#include "objects/PendulumSpring.hpp"
 
-#include <utils.hpp>
 #include <glm/glm.hpp>
 
 namespace GLOO {
 class PendulumSystem : public ParticleSystemBase {
     public:
-        PendulumSystem(int num_particles);
-        ~PendulumSystem() override;
-
-        int GetNumParticles() const { return num_particles_; }
+        PendulumSystem();
 
         ParticleState ComputeTimeDerivative(const ParticleState& state, float time) const override;
-        ParticleState ComputeAcceleration();
-
-    private:
-        int num_particles_;
-        std::vector<PendulumParticle> particles_;
-        std::vector<PendulumSpring> springs_;
+        //ParticleState ComputeAcceleration();       
 
 };
 } // namespace GLOO
