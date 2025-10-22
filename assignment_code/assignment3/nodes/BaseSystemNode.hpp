@@ -12,13 +12,15 @@ namespace GLOO {
 
 class BaseSystemNode : public SceneNode {
     // SceneNode containing system and state information for simple system
-    public:        
+    public:
+        void Update(double delta_time) override;
         ParticleSystemBase* GetSystem() const { return system_; }
 
         ParticleState GetState() const { return state_; }
         void SetState(ParticleState state) { state_ = state; }
 
-        void InitializeState();        
+        virtual void InitializeSystem();
+        virtual void InitializeState();        
 
     protected:
         std::unique_ptr<ParticleSystemBase> system_;

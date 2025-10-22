@@ -9,24 +9,18 @@ namespace GLOO {
 
 SimpleNode::SimpleNode() {
 
-    // Initialize the system for the simple node
-    system_ = make_unique<SimpleSystem>();
-
     // Create geometry
     sphere_mesh_ = PrimitiveFactory::CreateSphere(0.2f, 25, 25);
     shader_ = std::make_shared<PhongShader>();
 
+    InitializeSystem();
     InitializeState();
  
 }
 
-
-void SimpleNode::InitializeState() {
-    // Initialize the state for the simple node
-
-    // Vector of size 1 for the single sphere
-    std::vector<glm::vec3> simple_state_positions(1);
-    std::vector<glm::vec3> simple_state_velocities(1);
+void SimpleNode::InitializeSystem() {
+    // Initialize the system for the simple node
+    system_ = make_unique<SimpleSystem>();
 
     auto sphere_node = make_unique<SceneNode>();
     sphere_node->CreateComponent<ShadingComponent>(shader_);
@@ -34,6 +28,15 @@ void SimpleNode::InitializeState() {
     sphere_node->GetTransform().SetPosition(this->GetTransform().GetPosition());
 
     this->AddChild(std::move(sphere_node));
+
+}
+
+void SimpleNode::InitializeState() {
+    // Initialize the state for the simple node
+
+    // Vector of size 1 for the single sphere
+    std::vector<glm::vec3> simple_state_positions(1);
+    std::vector<glm::vec3> simple_state_velocities(1);
 
     glm::vec3 position = glm::vec3(0.5f, 0.75f, 0.5f);
     glm::vec3 velocity = glm::vec3(0.0f, 0.0f, 0.0f);

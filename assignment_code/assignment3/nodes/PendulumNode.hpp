@@ -18,6 +18,7 @@ class PendulumNode : public BaseSystemNode {
         void Update(double delta_time) override;
 
         void InitializeState();
+        void InitializeSystem();
     
     private:
         std::vector<SceneNode*> particle_nodes;

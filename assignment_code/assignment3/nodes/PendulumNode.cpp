@@ -21,6 +21,7 @@ PendulumNode::PendulumNode(int num_particles) {
     shader_ = std::make_shared<PhongShader>();
 
     InitializeState();
+    InitializeSystem();
 
 }
 
