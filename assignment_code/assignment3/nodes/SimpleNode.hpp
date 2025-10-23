@@ -18,7 +18,8 @@ class SimpleNode : public BaseSystemNode {
         void Update(double delta_time) override;
 
         void InitializeSystem() override;
-        void InitializeState() override;        
+        void InitializeState() override;  
+        void InitializeGeometry() override;      
 
     private:
         std::shared_ptr<VertexObject> sphere_mesh_;

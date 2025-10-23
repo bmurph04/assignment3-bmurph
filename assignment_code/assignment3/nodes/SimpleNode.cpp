@@ -15,20 +15,14 @@ SimpleNode::SimpleNode() {
 
     InitializeSystem();
     InitializeState();
- 
+    InitializeGeometry();
 }
 
 void SimpleNode::InitializeSystem() {
     // Initialize the system for the simple node
     system_ = make_unique<SimpleSystem>();
 
-    auto sphere_node = make_unique<SceneNode>();
-    sphere_node->CreateComponent<ShadingComponent>(shader_);
-    sphere_node->CreateComponent<RenderingComponent>(sphere_mesh_);
-    sphere_node->GetTransform().SetPosition(this->GetTransform().GetPosition());
-
-    this->AddChild(std::move(sphere_node));
-
+    // Nothing else to do for system initialization of simple node
 }
 
 void SimpleNode::InitializeState() {
@@ -47,6 +41,16 @@ void SimpleNode::InitializeState() {
     ParticleState simple_state{simple_state_positions, simple_state_velocities};
     state_ = simple_state;
 
+}
+
+void SimpleNode::InitializeGeometry() {
+    // Initialize geometry that we see in the scene for simple
+    auto sphere_node = make_unique<SceneNode>();
+    sphere_node->CreateComponent<ShadingComponent>(shader_);
+    sphere_node->CreateComponent<RenderingComponent>(sphere_mesh_);
+    sphere_node->GetTransform().SetPosition(this->GetTransform().GetPosition());
+
+    this->AddChild(std::move(sphere_node));
 }
 
 void SimpleNode::Update(double delta_time) {

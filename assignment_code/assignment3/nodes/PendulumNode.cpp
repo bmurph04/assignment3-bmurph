@@ -62,6 +62,10 @@ void PendulumNode::InitializeState() {
 
 }
 
+void PendulumNode::InitializeGeometry() {
+    // Initialize geometry that we see in the scene for pendulum
+}
+
 void PendulumNode::ExtendPendulum(float mass, glm::vec3 position, glm::vec3 velocity, float k, float r, bool fixed) {
     // // Assuming a linear chain as in the sample solution where each particle has at most one parent and one child.
 
