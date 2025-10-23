@@ -1,8 +1,8 @@
 #include "PendulumSystem.hpp"
 
 #include "nodes/ScenePhysicsNode.hpp"
-#include "objects/PendulumParticle.hpp"
-#include "objects/PendulumSpring.hpp"
+#include "objects/ParticleObject.hpp"
+#include "objects/SpringObject.hpp"
 
 namespace GLOO {
 
@@ -34,7 +34,7 @@ std::vector<glm::vec3> PendulumSystem::ComputeVelocity(const ParticleState& stat
 
     for (size_t i = 0; i < velocities.size(); i++) {
         // Get the particle associated with the ith index
-        PendulumParticle particle = particles_.at(i);
+        ParticleObject particle = particles_.at(i);
 
         // If the particle is fixed, the new velocity is 0.
         if (particle.fixed) {
@@ -57,7 +57,7 @@ std::vector<glm::vec3> PendulumSystem::ComputeAcceleration(const ParticleState& 
     // For loop with the intent of looking at each particle
     for (size_t i = 0; i < particles_.size(); i++) {
         // Get the particle associated with the ith index
-        PendulumParticle particle = particles_.at(i);
+        ParticleObject particle = particles_.at(i);
         
         if (particle.fixed == true){
             accelerations.at(i) == glm::vec3(0.0f);
@@ -79,12 +79,12 @@ std::vector<glm::vec3> PendulumSystem::ComputeAcceleration(const ParticleState& 
     // For loop with the intent of looking at each spring
     for (size_t i = 0; i < springs_.size(); i++){
         // Get the spring associated with the ith index
-        PendulumSpring spring = springs_.at(i);
+        SpringObject spring = springs_.at(i);
         // Get the particle and particle position associated with the 1st index 
-        PendulumParticle particle1 = particles_.at(spring.p1_idx);
+        ParticleObject particle1 = particles_.at(spring.p1_idx);
         glm::vec3 particle1_position = state.positions.at(spring.p1_idx);
         // Get the particle and particle position associated with the 2nd index
-        PendulumParticle particle2 = particles_.at(spring.p2_idx);
+        ParticleObject particle2 = particles_.at(spring.p2_idx);
         glm::vec3 particle2_position = state.positions.at(spring.p2_idx);
         
         // Compute the spring force between particles 1 and 2

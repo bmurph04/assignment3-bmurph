@@ -3,8 +3,8 @@
 
 #include "systems/ParticleSystemBase.hpp"
 #include "ParticleState.hpp"
-#include "objects/PendulumParticle.hpp"
-#include "objects/PendulumSpring.hpp"
+#include "objects/ParticleObject.hpp"
+#include "objects/SpringObject.hpp"
 
 #include <glm/glm.hpp>
 
@@ -13,8 +13,8 @@ class PendulumSystem : public ParticleSystemBase {
     public:
         PendulumSystem();
 
-        std::vector<PendulumParticle>& GetParticles() { return particles_; }
-        std::vector<PendulumSpring>& GetSprings() { return springs_; }
+        std::vector<ParticleObject>& GetParticles() { return particles_; }
+        std::vector<SpringObject>& GetSprings() { return springs_; }
 
         ParticleState ComputeTimeDerivative(const ParticleState& state, float time) const override;
         
@@ -22,8 +22,8 @@ class PendulumSystem : public ParticleSystemBase {
         std::vector<glm::vec3> ComputeAcceleration(const ParticleState& state) const;
     
     private:
-        std::vector<PendulumParticle> particles_;
-        std::vector<PendulumSpring> springs_;
+        std::vector<ParticleObject> particles_;
+        std::vector<SpringObject> springs_;
 
 };
 } // namespace GLOO

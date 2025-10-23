@@ -38,7 +38,7 @@ void PendulumNode::InitializeSystem(float mass, float k, float r) {
     
     // Initialize particles in pendulum system with default properties, reachable by index
     for (size_t i = 0; i < num_particles_; i++){
-        PendulumParticle new_particle{mass, false};
+        ParticleObject new_particle{mass, false};
         // If at root, set fixed to true
         if (i == 0)
             new_particle.fixed = true;
@@ -48,7 +48,7 @@ void PendulumNode::InitializeSystem(float mass, float k, float r) {
 
     // Initialize springs in pendulum system with default properties, reachable by index
     for (size_t i = 0; i < num_particles_-1; i++){
-        PendulumSpring new_spring{i, i+1, k, r};
+        SpringObject new_spring{i, i+1, k, r};
         this->GetSystem()->GetSprings().push_back(new_spring);
     }
 

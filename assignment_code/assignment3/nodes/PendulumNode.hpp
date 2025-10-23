@@ -4,8 +4,8 @@
 #include "nodes/BaseSystemNode.hpp"
 #include "systems/PendulumSystem.hpp"
 #include "ParticleState.hpp"
-#include "objects/PendulumParticle.hpp"
-#include "objects/PendulumSpring.hpp"
+#include "objects/ParticleObject.hpp"
+#include "objects/SpringObject.hpp"
 
 #include "gloo/SceneNode.hpp"
 #include "gloo/VertexObject.hpp"
