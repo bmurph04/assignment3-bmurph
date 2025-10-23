@@ -72,9 +72,9 @@ void PendulumNode::InitializeGeometry() {
         auto sphere_node = make_unique<SceneNode>();
         sphere_node->CreateComponent<ShadingComponent>(shader_);
         sphere_node->CreateComponent<RenderingComponent>(sphere_mesh_);
-        std::cout << glm::to_string(state_.positions.at(i)) << std::endl;
         sphere_node->GetTransform().SetPosition(state_.positions.at(i));
 
+        sphere_nodes_.push_back(sphere_node.get());
         this->AddChild(std::move(sphere_node));
     }
 }
@@ -93,7 +93,14 @@ void PendulumNode::ExtendPendulum(float mass, glm::vec3 position, glm::vec3 velo
 }
 
 void PendulumNode::Update(double delta_time) { 
-    
+    // Update function of ScenePhysicsNode for integrator has been run
+    // Do specific PendulumNode update behavior
+    for (size_t i = 0; i < sphere_nodes_.size(); i++){
+        glm::vec3 position = state_.positions.at(i);
+        SceneNode* sphere_node = sphere_nodes_.at(i);
+
+        sphere_node->GetTransform().SetPosition(position);
+    }
 }
 
 } // namespace GLOO

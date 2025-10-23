@@ -30,6 +30,7 @@ class PendulumNode : public BaseSystemNode {
         std::shared_ptr<VertexObject> sphere_mesh_;
         std::shared_ptr<ShaderProgram> shader_;
 
+        std::vector<SceneNode*> sphere_nodes_;
         std::vector<PendulumParticle> particles_;
         std::vector<PendulumSpring> springs_;
         size_t num_particles_;
