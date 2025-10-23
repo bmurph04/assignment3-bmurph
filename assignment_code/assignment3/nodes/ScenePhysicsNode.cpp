@@ -44,7 +44,7 @@ void ScenePhysicsNode::InitializeSystemNodes() {
     // Initialize the systems that will be displayed in the scene as nodes
     auto simple_node = make_unique<SimpleNode>(simple_node_pos);
     auto pendulum_node = make_unique<PendulumNode>(pendulum_node_pos, 4);
-    auto cloth_node = make_unique<ClothNode>(cloth_node_pos, 3);
+    auto cloth_node = make_unique<ClothNode>(cloth_node_pos, 8);
 
     system_nodes_.emplace_back(simple_node.get());
     system_nodes_.emplace_back(pendulum_node.get());

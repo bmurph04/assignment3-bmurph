@@ -47,7 +47,7 @@ void ClothNode::InitializeSystem(float mass, float k, float r) {
         ParticleObject new_particle{mass, false};
         // If at a particle in the first row, set fixed to true. Row major indexing will be used later
         if (i < side_length_) {
-            ///new_particle.fixed = true;
+            new_particle.fixed = true;
         }
         
         this->GetSystem()->GetParticles().push_back(new_particle);
@@ -90,14 +90,14 @@ void ClothNode::InitializeSystem(float mass, float k, float r) {
         for (int x = 0; x < int(side_length_); x++) {
             // Get current idx by computing y*side_length_+x
             size_t idx = y*side_length_+x;
-            std::cout << "x: " << x << " y: " << y << std::endl;
+            // std::cout << "x: " << x << " y: " << y << std::endl;
 
             // Create a shear spring between current and bottom left particle if it exists
             if ((x-1) >= 0 && (y+1) < int(side_length_)) {
                 size_t idx_left = (y+1)*side_length_+(x-1);
                 SpringObject new_shear_spring{idx, idx_left, k, shear_r};
                 this->GetSystem()->GetSprings().push_back(new_shear_spring);
-                std::cout << "Shear spring created between " << idx << " and " << idx_left << std::endl;
+                // std::cout << "Shear spring created between " << idx << " and " << idx_left << std::endl;
             }
 
             // Create a shear spring between current and bottom right particle if it exists
@@ -105,25 +105,25 @@ void ClothNode::InitializeSystem(float mass, float k, float r) {
                 size_t idx_right = (y+1)*side_length_+(x+1);
                 SpringObject new_shear_spring{idx, idx_right, k, shear_r};
                 this->GetSystem()->GetSprings().push_back(new_shear_spring);
-                std::cout << "Shear spring created between " << idx << " and " << idx_right << std::endl;
+                // std::cout << "Shear spring created between " << idx << " and " << idx_right << std::endl;
             }
         }
     }
-    std::cout << std::endl;
+    // std::cout << std::endl;
 
     // Finally, compute flexion springs
     for (size_t y = 0; y < side_length_; y++) {
         for (size_t x = 0; x < side_length_; x++) {
             // Get current idx by computing y*side_length_+x
             size_t idx = y*side_length_+x;
-            std::cout << "x: " << x << " y: " << y << std::endl;
+            // std::cout << "x: " << x << " y: " << y << std::endl;
 
             // Create a flexion spring between current and right particle if it exists
             if (x < side_length_-2){
                 size_t idx_right = y*side_length_+(x+2);
                 SpringObject new_flexion_spring{idx, idx_right, k, flexion_r};
                 this->GetSystem()->GetSprings().push_back(new_flexion_spring);
-                std::cout << "Flexion spring created between " << idx << " and " << idx_right << std::endl;
+                // std::cout << "Flexion spring created between " << idx << " and " << idx_right << std::endl;
             }
 
             // Create a flexion spring between current and right particle if it exists
@@ -131,7 +131,7 @@ void ClothNode::InitializeSystem(float mass, float k, float r) {
                 size_t idx_down = (y+2)*side_length_+x;
                 SpringObject new_flexion_spring{idx, idx_down, k, flexion_r};
                 this->GetSystem()->GetSprings().push_back(new_flexion_spring);
-                std::cout << "Flexion spring created between " << idx << " and " << idx_down << std::endl;
+                // std::cout << "Flexion spring created between " << idx << " and " << idx_down << std::endl;
             }
 
             
