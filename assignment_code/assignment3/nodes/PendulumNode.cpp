@@ -7,16 +7,20 @@
 #include "gloo/components/ShadingComponent.hpp"
 #include "gloo/components/RenderingComponent.hpp"
 
+#include <glm/gtx/string_cast.hpp>
+
+
 namespace GLOO {
 
 PendulumNode::PendulumNode(size_t num_particles) : num_particles_(num_particles){ 
 
     // Create geometry
-    sphere_mesh_ = PrimitiveFactory::CreateSphere(0.2f, 25, 25);
+    sphere_mesh_ = PrimitiveFactory::CreateSphere(0.1f, 25, 25);
     shader_ = std::make_shared<PhongShader>();
 
     InitializeSystem();
     InitializeState();
+    InitializeGeometry();
 
 }
 
@@ -47,14 +51,14 @@ void PendulumNode::InitializeState() {
     std::vector<glm::vec3> state_positions(num_particles_);
     std::vector<glm::vec3> state_velocities(num_particles_);
 
-    glm::vec3 position(-10.0f, 0.0f, 0.0f);
+    glm::vec3 position(-1.0f, 0.0f, 0.0f);
     glm::vec3 velocity(0.5f, 0.0f, -0.5f);
 
     for (size_t i = 0; i < num_particles_; i++) {
         state_positions.at(i) = position;
-        state_positions.at(i) = velocity;
+        state_velocities.at(i) = velocity;
 
-        position.y -= 5.0f;
+        position.y -= 0.75f;
     }
 
     ParticleState pendulum_state{state_positions, state_velocities};
@@ -64,6 +68,15 @@ void PendulumNode::InitializeState() {
 
 void PendulumNode::InitializeGeometry() {
     // Initialize geometry that we see in the scene for pendulum
+    for (size_t i = 0; i < particles_.size(); i++){
+        auto sphere_node = make_unique<SceneNode>();
+        sphere_node->CreateComponent<ShadingComponent>(shader_);
+        sphere_node->CreateComponent<RenderingComponent>(sphere_mesh_);
+        std::cout << glm::to_string(state_.positions.at(i)) << std::endl;
+        sphere_node->GetTransform().SetPosition(state_.positions.at(i));
+
+        this->AddChild(std::move(sphere_node));
+    }
 }
 
 void PendulumNode::ExtendPendulum(float mass, glm::vec3 position, glm::vec3 velocity, float k, float r, bool fixed) {

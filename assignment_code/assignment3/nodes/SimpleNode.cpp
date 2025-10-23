@@ -48,6 +48,7 @@ void SimpleNode::InitializeGeometry() {
     auto sphere_node = make_unique<SceneNode>();
     sphere_node->CreateComponent<ShadingComponent>(shader_);
     sphere_node->CreateComponent<RenderingComponent>(sphere_mesh_);
+    
     sphere_node->GetTransform().SetPosition(this->GetTransform().GetPosition());
 
     this->AddChild(std::move(sphere_node));
