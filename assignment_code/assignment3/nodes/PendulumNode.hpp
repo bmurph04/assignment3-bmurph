@@ -21,9 +21,9 @@ class PendulumNode : public BaseSystemNode {
 
         void Update(double delta_time) override;
 
-        void InitializeState() override;
-        void InitializeSystem() override;
-        void InitializeGeometry() override;
+        void InitializeSystem(float mass, float k, float r);
+        void InitializeState(float mass, float k, float r, glm::vec3 pos, glm::vec3 vel);
+        void InitializeGeometry();
 
         void ExtendPendulum(float mass, glm::vec3 position, glm::vec3 velocity, float k, float r, bool fixed = false);
     

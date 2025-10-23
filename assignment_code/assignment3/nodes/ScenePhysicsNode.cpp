@@ -24,7 +24,7 @@
 namespace GLOO {
 
 const glm::vec3 ScenePhysicsNode::g = {0.0f, -9.81f, 0.0f};
-const float ScenePhysicsNode::b = 2.58;
+const float ScenePhysicsNode::b = 0.01f;
 
 ScenePhysicsNode::ScenePhysicsNode(IntegratorType integrator_type, float step, double time_since_update, double time_accumulated) 
     : SceneNode(), step_(step), time_since_start_(time_since_update), time_accumulated_(time_accumulated) {
@@ -38,8 +38,12 @@ ScenePhysicsNode::ScenePhysicsNode(IntegratorType integrator_type, float step, d
 void ScenePhysicsNode::InitializeSystemNodes() {
     // Initialize the systems that will be displayed in the scene as nodes
     auto simple_node = make_unique<SimpleNode>();
-    auto pendulum_node = make_unique<PendulumNode>(2);
+    auto pendulum_node = make_unique<PendulumNode>(4);
     // auto cloth_node = make_unique<ClothNode>();
+
+    // Set the position of each system on the screen
+    simple_node->GetTransform().SetPosition({-2.0f, 0.0f, 0.0f});
+    pendulum_node->GetTransform().SetPosition({0.0f, 0.0f, 0.0f});
 
     system_nodes_.emplace_back(simple_node.get());
     system_nodes_.emplace_back(pendulum_node.get());

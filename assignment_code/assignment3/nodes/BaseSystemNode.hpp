@@ -18,10 +18,6 @@ class BaseSystemNode : public SceneNode {
         ParticleState GetState() const { return state_; }
         void SetState(ParticleState state) { state_ = state; }
 
-        virtual void InitializeSystem() = 0;
-        virtual void InitializeState() = 0;
-        virtual void InitializeGeometry() = 0;  
-
     protected:
         std::unique_ptr<ParticleSystemBase> system_;
         ParticleState state_;

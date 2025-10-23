@@ -1,6 +1,7 @@
 #include "nodes/PendulumNode.hpp"
 
 #include "systems/PendulumSystem.hpp"
+#include "nodes/ScenePhysicsNode.hpp"
 
 #include "gloo/debug/PrimitiveFactory.hpp"
 #include "gloo/shaders/PhongShader.hpp"
@@ -15,21 +16,26 @@ namespace GLOO {
 PendulumNode::PendulumNode(size_t num_particles) : num_particles_(num_particles){ 
 
     // Create geometry
-    sphere_mesh_ = PrimitiveFactory::CreateSphere(0.1f, 25, 25);
+    sphere_mesh_ = PrimitiveFactory::CreateSphere(0.08f, 25, 25);
     shader_ = std::make_shared<PhongShader>();
 
-    InitializeSystem();
-    InitializeState();
+    float default_mass = 0.05f;
+    float default_k = 2.5f;
+    float default_r = 0.05f;
+    glm::vec3 default_pos = {0.0f, 0.0f, 0.0f};
+    glm::vec3 default_vel = {0.01f, 0.0f, -3.5f};
+
+    InitializeSystem(default_mass, default_k, default_r);
+    InitializeState(default_mass, default_k, default_r, default_pos, default_vel);
     InitializeGeometry();
 
 }
 
-void PendulumNode::InitializeSystem() {
+void PendulumNode::InitializeSystem(float mass, float k, float r) {
     // Initialize the system for the pendulum node
     system_ = make_unique<PendulumSystem>();
     
     // Initialize particles in pendulum system with default properties, reachable by index
-    float mass = 1;
     for (size_t i = 0; i < num_particles_; i++){
         PendulumParticle new_particle{mass, false};
         // If at root, set fixed to true
@@ -40,8 +46,6 @@ void PendulumNode::InitializeSystem() {
     }
 
     // Initialize springs in pendulum system with default properties, reachable by index
-    float k = 20;
-    float r = 1;
     for (size_t i = 0; i < num_particles_-1; i++){
         PendulumSpring new_spring{i, i+1, k, r};
         this->GetSystem()->GetSprings().push_back(new_spring);
@@ -49,21 +53,22 @@ void PendulumNode::InitializeSystem() {
 
 }
 
-void PendulumNode::InitializeState() {
+void PendulumNode::InitializeState(float mass, float k, float r, glm::vec3 pos, glm::vec3 vel) {
     // Initialize the state for the pendulum node
+    float g = glm::abs(ScenePhysicsNode::g.y);
 
     // vector of size num_particles for the particles in the system
     std::vector<glm::vec3> state_positions(num_particles_);
     std::vector<glm::vec3> state_velocities(num_particles_);
-
-    glm::vec3 position(-1.0f, 0.0f, 0.0f);
-    glm::vec3 velocity(0.5f, 0.0f, -0.5f);
-
+    
     for (size_t i = 0; i < num_particles_; i++) {
-        state_positions.at(i) = position;
-        state_velocities.at(i) = velocity;
-
-        position.y -= 0.75f;
+        state_positions.at(i) = pos;
+        state_velocities.at(i) = vel;
+        
+        float mass_below = mass * ((num_particles_-1) - i);
+        // New equilibrium length is x = r + mg/k. Use this to set the initial points at an equilibrium length
+        pos.y -= r + (mass_below*g/k);
+        vel.z -= 0.5f;
     }
 
     ParticleState pendulum_state{state_positions, state_velocities};
