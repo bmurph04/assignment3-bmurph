@@ -20,6 +20,7 @@ class ClothNode : public BaseSystemNode {
     
     private:
         std::vector<SceneNode*> sphere_nodes_;
+        size_t side_length_;
         size_t num_particles_;
     
 };
