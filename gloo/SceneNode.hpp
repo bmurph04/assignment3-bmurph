@@ -106,9 +106,11 @@ class SceneNode {
                      std::unique_ptr<ComponentBase>,
                      EnumClassHash>
       component_dict_;
-  std::vector<std::unique_ptr<SceneNode>> children_;
   SceneNode* parent_;
   bool active_;
+  protected:
+    std::vector<std::unique_ptr<SceneNode>> children_;
+
 };
 }  // namespace GLOO
 

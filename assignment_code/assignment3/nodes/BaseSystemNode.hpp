@@ -15,8 +15,8 @@ class BaseSystemNode : public SceneNode {
     public:
         virtual ParticleSystemBase* GetSystem() const { return system_.get(); }
 
-        ParticleState GetState() const { return state_; }
-        void SetState(ParticleState state) { state_ = state; }
+        ParticleState& GetState() { return state_; }
+        void SetState(const ParticleState& state) { state_ = state; }
 
     protected:
         std::unique_ptr<ParticleSystemBase> system_;

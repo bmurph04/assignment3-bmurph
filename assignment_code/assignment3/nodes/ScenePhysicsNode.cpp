@@ -10,6 +10,8 @@
 #include "integrators/IntegratorFactory.hpp"
 #include "integrators/IntegratorBase.hpp"
 
+#include "gloo/InputManager.hpp"
+
 #include <vector>
 
 #include <glm/gtx/string_cast.hpp>
@@ -36,6 +38,8 @@ ScenePhysicsNode::ScenePhysicsNode(IntegratorType integrator_type, float step, d
 }
 
 void ScenePhysicsNode::InitializeSystemNodes() {
+    system_nodes_.clear();
+    children_.clear();
     // Initialize the positions of the systems
     glm::vec3 simple_node_pos = {-1.5f, 0.0f, 0.0f};
     glm::vec3 pendulum_node_pos = {0.0f, 0.0f, 0.0f};
@@ -55,7 +59,24 @@ void ScenePhysicsNode::InitializeSystemNodes() {
     this->AddChild(std::move(cloth_node));
 }
 
-void ScenePhysicsNode::Update(double delta_time) { 
+void ScenePhysicsNode::Update(double delta_time) {
+    
+    // Handle 'R' input
+    static bool prev_released = true;
+    if (InputManager::GetInstance().IsKeyPressed('R')) {
+        if (prev_released) {
+            time_since_start_ = 0;
+            time_accumulated_ = 0;
+            InitializeSystemNodes();
+        }
+        prev_released = false;
+        return;
+    }
+    else {
+        prev_released = true;
+    }
+
+    // Do update step
     time_since_start_ += delta_time;
     
     while (time_accumulated_ < time_since_start_){
