@@ -57,6 +57,7 @@ void ClothNode::InitializeSystem(float mass, float k, float r) {
         for (size_t x = 0; x < side_length_; x++){
             // Get current idx by computing y*side_length_+x
             size_t idx = y*side_length_+x;
+            // std::cout << "x: " << x << " y: " << y << std::endl;
 
             // Create a horizontal spring if there's a particle to the left of the current one
             if (x < side_length_-1) {
@@ -64,6 +65,7 @@ void ClothNode::InitializeSystem(float mass, float k, float r) {
                 size_t idx_next_x = y*side_length_+(x+1);
                 SpringObject new_structural_spring_x{idx, idx_next_x, k, r};
                 this->GetSystem()->GetSprings().push_back(new_structural_spring_x);
+                // std::cout << "Structural spring created between " << idx << " and " << idx_next_x << std::endl;
             }
 
             // Create a vertical spring if there's a particle below the current one
@@ -72,6 +74,33 @@ void ClothNode::InitializeSystem(float mass, float k, float r) {
                 size_t idx_next_y = (y+1)*side_length_+x;
                 SpringObject new_structural_spring_y{idx, idx_next_y, k, r};
                 this->GetSystem()->GetSprings().push_back(new_structural_spring_y);
+                // std::cout << "Structural spring created between " << idx << " and " << idx_next_y << std::endl;
+            }
+        }
+    }
+    // cout << std::endl;
+
+    // Next, initialize shear springs
+    for (int y = 0; y < int(side_length_); y++) {
+        for (int x = 0; x < int(side_length_); x++) {
+            // Get current idx by computing y*side_length_+x
+            size_t idx = y*side_length_+x;
+            std::cout << "x: " << x << " y: " << y << std::endl;
+
+            // Create a shear spring between current and bottom left particle if it exists
+            if ((x-1) >= 0 && (y+1) < int(side_length_)) {
+                size_t idx_left = (y+1)*side_length_+(x-1);
+                SpringObject new_shear_spring{idx, idx_left, k, r};
+                this->GetSystem()->GetSprings().push_back(new_shear_spring);
+                std::cout << "Shear spring created between " << idx << " and " << idx_left << std::endl;
+            }
+
+            // Create a shear spring between current and bottom right particle if it exists
+            if ((x+1) < int(side_length_) && (y+1) < int(side_length_)) {
+                size_t idx_right = (y+1)*side_length_+(x+1);
+                SpringObject new_shear_spring{idx, idx_right, k, r};
+                this->GetSystem()->GetSprings().push_back(new_shear_spring);
+                std::cout << "Shear spring created between " << idx << " and " << idx_right << std::endl;
             }
         }
     }
@@ -115,8 +144,6 @@ void ClothNode::InitializeState(float mass, float k, float r, glm::vec3 pos, glm
 
 void ClothNode::InitializeGeometry() {
     // Initialize geometry that we see in the scene for cloth
-    std::cout << this->GetSystem()->GetParticles().size() << std::endl;
-    std::cout << this->GetSystem()->GetSprings().size() << std::endl;
 
     // For each particle
     for (size_t i = 0; i < this->GetSystem()->GetParticles().size(); i++){
