@@ -39,7 +39,7 @@ void ScenePhysicsNode::InitializeSystemNodes() {
     // Initialize the positions of the systems
     glm::vec3 simple_node_pos = {-1.5f, 0.0f, 0.0f};
     glm::vec3 pendulum_node_pos = {0.0f, 0.0f, 0.0f};
-    glm::vec3 cloth_node_pos = {1.5f, 0.0f, 0.0f};
+    glm::vec3 cloth_node_pos = {1.0f, 0.0f, 0.0f};
 
     // Initialize the systems that will be displayed in the scene as nodes
     auto simple_node = make_unique<SimpleNode>(simple_node_pos);
