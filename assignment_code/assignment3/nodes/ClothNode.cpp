@@ -28,7 +28,7 @@ ClothNode::ClothNode(glm::vec3 pos, size_t side_length) : side_length_(side_leng
     float default_k = 1.5f;
     float default_r = 0.05f;
     glm::vec3 default_pos = this->GetTransform().GetPosition() + glm::vec3(-0.5f, 0.0f, 0.0f);
-    glm::vec3 default_vel = {0.3f, 0.0f, -3.5f};
+    glm::vec3 default_vel = {0.0f, 0.0f, -3.5f};
 
     InitializeSystem(default_mass, default_k, default_r);
     InitializeState(default_mass, default_k, default_r, default_pos, default_vel);
@@ -78,7 +78,7 @@ void ClothNode::InitializeSystem(float mass, float k, float r) {
             }
         }
     }
-    // cout << std::endl;
+    // std::cout << std::endl;
 
     // Next, initialize shear springs
     for (int y = 0; y < int(side_length_); y++) {
@@ -102,6 +102,34 @@ void ClothNode::InitializeSystem(float mass, float k, float r) {
                 this->GetSystem()->GetSprings().push_back(new_shear_spring);
                 std::cout << "Shear spring created between " << idx << " and " << idx_right << std::endl;
             }
+        }
+    }
+    std::cout << std::endl;
+
+    // Finally, compute flexion springs
+    for (size_t y = 0; y < side_length_; y++) {
+        for (size_t x = 0; x < side_length_; x++) {
+            // Get current idx by computing y*side_length_+x
+            size_t idx = y*side_length_+x;
+            std::cout << "x: " << x << " y: " << y << std::endl;
+
+            // Create a flexion spring between current and right particle if it exists
+            if (x < side_length_-2){
+                size_t idx_right = y*side_length_+(x+2);
+                SpringObject new_flexion_spring{idx, idx_right, k, r};
+                this->GetSystem()->GetSprings().push_back(new_flexion_spring);
+                std::cout << "Flexion spring created between " << idx << " and " << idx_right << std::endl;
+            }
+
+            // Create a flexion spring between current and right particle if it exists
+            if (y < side_length_-2){
+                size_t idx_down = (y+2)*side_length_+x;
+                SpringObject new_flexion_spring{idx, idx_down, k, r};
+                this->GetSystem()->GetSprings().push_back(new_flexion_spring);
+                std::cout << "Flexion spring created between " << idx << " and " << idx_down << std::endl;
+            }
+
+            
         }
     }
 
