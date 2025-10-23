@@ -20,6 +20,9 @@ class ScenePhysicsNode : public SceneNode {
         void InitializeSystemNodes();
 
         void Update(double delta_time) override;
+
+        static const float g_ = 9.81;
+        static const float b_ = 2.58;
     
     private:
         std::vector<BaseSystemNode*> system_nodes_;
