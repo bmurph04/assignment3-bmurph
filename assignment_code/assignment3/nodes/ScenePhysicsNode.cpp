@@ -36,14 +36,14 @@ ScenePhysicsNode::ScenePhysicsNode(IntegratorType integrator_type, float step, d
 }
 
 void ScenePhysicsNode::InitializeSystemNodes() {
-    // Initialize the systems that will be displayed in the scene as nodes
-    auto simple_node = make_unique<SimpleNode>();
-    auto pendulum_node = make_unique<PendulumNode>(4);
-    // auto cloth_node = make_unique<ClothNode>();
+    // Initialize the positions of the systems
+    glm::vec3 simple_node_pos = {-1.5f, 0.0f, 0.0f};
+    glm::vec3 pendulum_node_pos = {0.0f, 0.0f, 0.0f};
 
-    // Set the position of each system on the screen
-    simple_node->GetTransform().SetPosition({-2.0f, 0.0f, 0.0f});
-    pendulum_node->GetTransform().SetPosition({0.0f, 0.0f, 0.0f});
+    // Initialize the systems that will be displayed in the scene as nodes
+    auto simple_node = make_unique<SimpleNode>(simple_node_pos);
+    auto pendulum_node = make_unique<PendulumNode>(pendulum_node_pos, 4);
+    // auto cloth_node = make_unique<ClothNode>();
 
     system_nodes_.emplace_back(simple_node.get());
     system_nodes_.emplace_back(pendulum_node.get());

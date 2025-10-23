@@ -14,11 +14,11 @@ namespace GLOO {
 class SimpleNode : public BaseSystemNode {
     // SceneNode containing system and state information for simple system
     public:
-        SimpleNode();
+        SimpleNode(glm::vec3 pos);
         void Update(double delta_time) override;
 
         void InitializeSystem();
-        void InitializeState();  
+        void InitializeState(glm::vec3 pos, glm::vec3 vel);  
         void InitializeGeometry();      
 
     private:

@@ -16,7 +16,7 @@ namespace GLOO {
 class PendulumNode : public BaseSystemNode { 
     // SceneNode contianing system and state information for pendulum system
     public:
-        PendulumNode(size_t num_particles);
+        PendulumNode(glm::vec3 pos, size_t num_particles);
         PendulumSystem* GetSystem() const override { return dynamic_cast<PendulumSystem*>(system_.get()); }
 
         void Update(double delta_time) override;

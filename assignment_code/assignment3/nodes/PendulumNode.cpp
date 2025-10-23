@@ -13,7 +13,8 @@
 
 namespace GLOO {
 
-PendulumNode::PendulumNode(size_t num_particles) : num_particles_(num_particles){ 
+PendulumNode::PendulumNode(glm::vec3 pos, size_t num_particles) : num_particles_(num_particles){ 
+    this->GetTransform().SetPosition(pos);
 
     // Create geometry
     sphere_mesh_ = PrimitiveFactory::CreateSphere(0.08f, 25, 25);
@@ -22,8 +23,8 @@ PendulumNode::PendulumNode(size_t num_particles) : num_particles_(num_particles)
     float default_mass = 0.05f;
     float default_k = 2.5f;
     float default_r = 0.05f;
-    glm::vec3 default_pos = {0.0f, 0.0f, 0.0f};
-    glm::vec3 default_vel = {0.01f, 0.0f, -3.5f};
+    glm::vec3 default_pos = this->GetTransform().GetPosition();
+    glm::vec3 default_vel = {0.3f, 0.0f, -3.5f};
 
     InitializeSystem(default_mass, default_k, default_r);
     InitializeState(default_mass, default_k, default_r, default_pos, default_vel);
