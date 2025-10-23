@@ -99,8 +99,7 @@ std::vector<glm::vec3> PendulumSystem::ComputeAcceleration(const ParticleState& 
             accelerations.at(spring.p2_idx) -= spring_force / particle2.mass;
     }
 
-    return accelerations;
-    
+    return accelerations; 
 
 }
 

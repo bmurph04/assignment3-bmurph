@@ -17,9 +17,15 @@ class ClothNode : public BaseSystemNode {
         void InitializeSystem(float mass, float k, float r);
         void InitializeState(float mass, float k, float r, glm::vec3 pos, glm::vec3 vel);
         void InitializeGeometry();
+
+        void PlotWireframe();
     
     private:
-        std::vector<SceneNode*> sphere_nodes_;
+        std::shared_ptr<ShaderProgram> line_shader_;
+        std::vector<SceneNode*> sphere_nodes_;        
+        SceneNode* spring_line_node_;
+
+        std::shared_ptr<VertexObject> spring_line_;
         size_t side_length_;
         size_t num_particles_;
     

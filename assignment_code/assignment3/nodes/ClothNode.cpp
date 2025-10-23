@@ -5,8 +5,10 @@
 
 #include "gloo/debug/PrimitiveFactory.hpp"
 #include "gloo/shaders/PhongShader.hpp"
+#include "gloo/shaders/SimpleShader.hpp"
 #include "gloo/components/ShadingComponent.hpp"
 #include "gloo/components/RenderingComponent.hpp"
+#include "gloo/VertexObject.hpp"
 
 #include <glm/gtx/string_cast.hpp>
 
@@ -20,9 +22,10 @@ ClothNode::ClothNode(glm::vec3 pos, size_t side_length) : side_length_(side_leng
     // Create geometry
     sphere_mesh_ = PrimitiveFactory::CreateSphere(0.08f, 25, 25);
     shader_ = std::make_shared<PhongShader>();
+    line_shader_ = std::make_shared<SimpleShader>();
 
-    float default_mass = 0.05f;
-    float default_k = 2.5f;
+    float default_mass = 0.1f;
+    float default_k = 1.5f;
     float default_r = 0.05f;
     glm::vec3 default_pos = this->GetTransform().GetPosition() + glm::vec3(-0.5f, 0.0f, 0.0f);
     glm::vec3 default_vel = {0.3f, 0.0f, -3.5f};
@@ -87,9 +90,11 @@ void ClothNode::InitializeState(float mass, float k, float r, glm::vec3 pos, glm
         for (size_t x = 0; x < side_length_; x++) {
             size_t state_idx = y * side_length_ + x;
 
+            float mass_right = mass * ((side_length_-1) - x);
+
             state_positions.at(state_idx) = pos;
             state_velocities.at(state_idx) = vel;
-            pos.x += 0.5f;
+            pos.x += r + (mass_right*g/k);
         }
         
         pos.x = default_x;
@@ -105,6 +110,8 @@ void ClothNode::InitializeState(float mass, float k, float r, glm::vec3 pos, glm
 
 void ClothNode::InitializeGeometry() {
     // Initialize geometry that we see in the scene for cloth
+    
+    // For each particle
     for (size_t i = 0; i < this->GetSystem()->GetParticles().size(); i++){
         auto sphere_node = make_unique<SceneNode>();
         sphere_node->CreateComponent<ShadingComponent>(shader_);
@@ -113,6 +120,87 @@ void ClothNode::InitializeGeometry() {
 
         sphere_nodes_.push_back(sphere_node.get());
         this->AddChild(std::move(sphere_node));
+    }
+    
+    // Create a spring line node that'll hold the drawn line
+    auto spring_line_node = make_unique<SceneNode>();
+    spring_line_node_ = spring_line_node.get();
+    spring_line_node->CreateComponent<ShadingComponent>(line_shader_);
+    
+    PlotWireframe();
+
+    // // Update the vertex object using each spring to render lines
+    // auto spring_line_positions = make_unique<PositionArray>();
+    // auto spring_line_indices = make_unique<IndexArray>();
+
+    // // Iterate through each spring and add info to PositionArray and IndexArray for updating vertex objects
+    // for (size_t i = 0; i < this->GetSystem()->GetSprings().size(); i++) {                 
+    //     // Get the spring
+    //     SpringObject spring = this->GetSystem()->GetSprings().at(i);
+    //     // Get the index and position of particle1
+    //     size_t p1_idx = spring.p1_idx;
+    //     glm::vec3 p1_pos = state_.positions.at(p1_idx);
+    //     // Get the index and position of particle2
+    //     size_t p2_idx = spring.p2_idx;
+    //     glm::vec3 p2_pos = state_.positions.at(p2_idx);
+
+    //     // Set the position array
+    //     spring_line_positions->push_back(p1_pos);
+    //     spring_line_positions->push_back(p2_pos);
+    //     // Set the index array
+    //     spring_line_indices->push_back(p1_idx);
+    //     spring_line_indices->push_back(p2_idx); 
+    // }
+
+    // spring_line_vobj->UpdatePositions(std::move(spring_line_positions));
+    // spring_line_vobj->UpdateIndices(std::move(spring_line_indices));
+
+    this->AddChild(std::move(spring_line_node));
+
+}
+
+void ClothNode::PlotWireframe() {
+
+    // Update the vertex object using each spring to render lines
+    auto spring_line_positions = make_unique<PositionArray>();
+    auto spring_line_indices = make_unique<IndexArray>();
+
+    for (size_t i = 0; i < this->GetSystem()->GetSprings().size(); i++){
+        // Get the spring
+        SpringObject spring = this->GetSystem()->GetSprings().at(i);
+        // Get the index and position of particle1
+        size_t p1_idx = spring.p1_idx;
+        glm::vec3 p1_pos = state_.positions.at(p1_idx);
+        // Get the index and position of particle2
+        size_t p2_idx = spring.p2_idx;
+        glm::vec3 p2_pos = state_.positions.at(p2_idx);
+
+        // Set the position array
+        spring_line_positions->push_back(p1_pos);
+        spring_line_positions->push_back(p2_pos);
+        // Set the index array
+        spring_line_indices->push_back(p1_idx);
+        spring_line_indices->push_back(p2_idx);
+    }
+
+    // If mesh (lines drawn) hasnt been initialized yet, initialize
+    if (spring_line_node_->GetComponentPtr<RenderingComponent>() == nullptr) {
+        std::cout << "this runs " << std::endl;
+        // Create a spring line vertex object that'll update positions of drawn line
+        auto spring_line_vobj = std::make_shared<VertexObject>();
+        // Update its vertices and positions
+        spring_line_vobj->UpdatePositions(std::move(spring_line_positions));
+        spring_line_vobj->UpdateIndices(std::move(spring_line_indices));
+        // Create a rendering component so lines can be drawn to screen
+        auto& rcomp = spring_line_node_->CreateComponent<RenderingComponent>(spring_line_vobj);
+        rcomp.SetDrawMode(DrawMode::Lines);
+    }
+    else{
+        // Get the spring line vertex object that'll update positions of drawn line
+        VertexObject* spring_line_vobj = spring_line_node_->GetComponentPtr<RenderingComponent>()->GetVertexObjectPtr();
+        // Update its vertices and positions
+        spring_line_vobj->UpdatePositions(std::move(spring_line_positions));
+        spring_line_vobj->UpdateIndices(std::move(spring_line_indices));
     }
 }
 
@@ -125,6 +213,8 @@ void ClothNode::Update(double delta_time) {
 
         sphere_node->GetTransform().SetPosition(position);
     }
+
+    PlotWireframe();
 
 }
 
