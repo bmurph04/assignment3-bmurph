@@ -48,24 +48,29 @@ void ClothNode::InitializeSystem(float mass, float k, float r) {
             new_particle.fixed = true;
         
         this->GetSystem()->GetParticles().push_back(new_particle);
+    }
 
-        // Initialize springs in cloth system with default properties
+    // Initialize springs in cloth system with default properties
 
-        // Start with initializing structural springs
-        for (size_t y = 0; y < side_length_-1; y++){
-            for (size_t x = 0; x < side_length_-1; x++){
-                // Get current idx by computing y*side_length_+x
-                size_t idx = y*side_length_+x;
+    // Start with initializing structural springs
+    for (size_t y = 0; y < side_length_; y++){
+        for (size_t x = 0; x < side_length_; x++){
+            // Get current idx by computing y*side_length_+x
+            size_t idx = y*side_length_+x;
 
+            // Create a horizontal spring if there's a particle to the left of the current one
+            if (x < side_length_-1) {
                 // Structural spring between current idx and y*side_length_+(x+1) (x direction)
                 size_t idx_next_x = y*side_length_+(x+1);
                 SpringObject new_structural_spring_x{idx, idx_next_x, k, r};
+                this->GetSystem()->GetSprings().push_back(new_structural_spring_x);
+            }
 
+            // Create a vertical spring if there's a particle below the current one
+            if (y < side_length_ - 1) {
                 // Strucutral spring between current idx and (y+1)*side_length_+x (y direction)
                 size_t idx_next_y = (y+1)*side_length_+x;
                 SpringObject new_structural_spring_y{idx, idx_next_y, k, r};
-
-                this->GetSystem()->GetSprings().push_back(new_structural_spring_x);
                 this->GetSystem()->GetSprings().push_back(new_structural_spring_y);
             }
         }
@@ -110,7 +115,9 @@ void ClothNode::InitializeState(float mass, float k, float r, glm::vec3 pos, glm
 
 void ClothNode::InitializeGeometry() {
     // Initialize geometry that we see in the scene for cloth
-    
+    std::cout << this->GetSystem()->GetParticles().size() << std::endl;
+    std::cout << this->GetSystem()->GetSprings().size() << std::endl;
+
     // For each particle
     for (size_t i = 0; i < this->GetSystem()->GetParticles().size(); i++){
         auto sphere_node = make_unique<SceneNode>();
@@ -129,32 +136,6 @@ void ClothNode::InitializeGeometry() {
     
     PlotWireframe();
 
-    // // Update the vertex object using each spring to render lines
-    // auto spring_line_positions = make_unique<PositionArray>();
-    // auto spring_line_indices = make_unique<IndexArray>();
-
-    // // Iterate through each spring and add info to PositionArray and IndexArray for updating vertex objects
-    // for (size_t i = 0; i < this->GetSystem()->GetSprings().size(); i++) {                 
-    //     // Get the spring
-    //     SpringObject spring = this->GetSystem()->GetSprings().at(i);
-    //     // Get the index and position of particle1
-    //     size_t p1_idx = spring.p1_idx;
-    //     glm::vec3 p1_pos = state_.positions.at(p1_idx);
-    //     // Get the index and position of particle2
-    //     size_t p2_idx = spring.p2_idx;
-    //     glm::vec3 p2_pos = state_.positions.at(p2_idx);
-
-    //     // Set the position array
-    //     spring_line_positions->push_back(p1_pos);
-    //     spring_line_positions->push_back(p2_pos);
-    //     // Set the index array
-    //     spring_line_indices->push_back(p1_idx);
-    //     spring_line_indices->push_back(p2_idx); 
-    // }
-
-    // spring_line_vobj->UpdatePositions(std::move(spring_line_positions));
-    // spring_line_vobj->UpdateIndices(std::move(spring_line_indices));
-
     this->AddChild(std::move(spring_line_node));
 
 }
@@ -165,6 +146,7 @@ void ClothNode::PlotWireframe() {
     auto spring_line_positions = make_unique<PositionArray>();
     auto spring_line_indices = make_unique<IndexArray>();
 
+    size_t indexarr_idx = 0;
     for (size_t i = 0; i < this->GetSystem()->GetSprings().size(); i++){
         // Get the spring
         SpringObject spring = this->GetSystem()->GetSprings().at(i);
@@ -179,13 +161,13 @@ void ClothNode::PlotWireframe() {
         spring_line_positions->push_back(p1_pos);
         spring_line_positions->push_back(p2_pos);
         // Set the index array
-        spring_line_indices->push_back(p1_idx);
-        spring_line_indices->push_back(p2_idx);
+        spring_line_indices->push_back(indexarr_idx);
+        spring_line_indices->push_back(indexarr_idx+1);
+        indexarr_idx += 2;
     }
 
     // If mesh (lines drawn) hasnt been initialized yet, initialize
     if (spring_line_node_->GetComponentPtr<RenderingComponent>() == nullptr) {
-        std::cout << "this runs " << std::endl;
         // Create a spring line vertex object that'll update positions of drawn line
         auto spring_line_vobj = std::make_shared<VertexObject>();
         // Update its vertices and positions
