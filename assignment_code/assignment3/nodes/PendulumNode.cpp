@@ -30,16 +30,21 @@ void PendulumNode::InitializeSystem() {
     
     // Initialize particles in pendulum system with default properties, reachable by index
     float mass = 1;
-    float k = 0.5;
-    float r = 0.5;
-
     for (size_t i = 0; i < num_particles_; i++){
         PendulumParticle new_particle{mass, false};
         // If at root, set fixed to true
         if (i == 0)
             new_particle.fixed = true;
+    
+        this->GetSystem()->GetParticles().push_back(new_particle);
+    }
 
-        particles_.push_back(new_particle);
+    // Initialize springs in pendulum system with default properties, reachable by index
+    float k = 0.5;
+    float r = 0.5;
+    for (size_t i = 0; i < num_particles_-1; i++){
+        PendulumSpring new_spring{i, i+1, k, r};
+        this->GetSystem()->GetSprings().push_back(new_spring);
     }
 
 }
@@ -68,7 +73,7 @@ void PendulumNode::InitializeState() {
 
 void PendulumNode::InitializeGeometry() {
     // Initialize geometry that we see in the scene for pendulum
-    for (size_t i = 0; i < particles_.size(); i++){
+    for (size_t i = 0; i < this->GetSystem()->GetParticles().size(); i++){
         auto sphere_node = make_unique<SceneNode>();
         sphere_node->CreateComponent<ShadingComponent>(shader_);
         sphere_node->CreateComponent<RenderingComponent>(sphere_mesh_);

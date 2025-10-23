@@ -13,7 +13,7 @@ namespace GLOO {
 class BaseSystemNode : public SceneNode {
     // SceneNode containing system and state information for simple system
     public:
-        ParticleSystemBase* GetSystem() const { return system_.get(); }
+        virtual ParticleSystemBase* GetSystem() const { return system_.get(); }
 
         ParticleState GetState() const { return state_; }
         void SetState(ParticleState state) { state_ = state; }

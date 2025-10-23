@@ -17,6 +17,8 @@ class PendulumNode : public BaseSystemNode {
     // SceneNode contianing system and state information for pendulum system
     public:
         PendulumNode(size_t num_particles);
+        PendulumSystem* GetSystem() const override { return dynamic_cast<PendulumSystem*>(system_.get()); }
+
         void Update(double delta_time) override;
 
         void InitializeState() override;
@@ -31,8 +33,6 @@ class PendulumNode : public BaseSystemNode {
         std::shared_ptr<ShaderProgram> shader_;
 
         std::vector<SceneNode*> sphere_nodes_;
-        std::vector<PendulumParticle> particles_;
-        std::vector<PendulumSpring> springs_;
         size_t num_particles_;
 
 };
