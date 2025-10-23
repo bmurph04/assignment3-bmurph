@@ -39,19 +39,20 @@ void ScenePhysicsNode::InitializeSystemNodes() {
     // Initialize the positions of the systems
     glm::vec3 simple_node_pos = {-1.5f, 0.0f, 0.0f};
     glm::vec3 pendulum_node_pos = {0.0f, 0.0f, 0.0f};
+    glm::vec3 cloth_node_pos = {1.5f, 0.0f, 0.0f};
 
     // Initialize the systems that will be displayed in the scene as nodes
     auto simple_node = make_unique<SimpleNode>(simple_node_pos);
     auto pendulum_node = make_unique<PendulumNode>(pendulum_node_pos, 4);
-    // auto cloth_node = make_unique<ClothNode>();
+    auto cloth_node = make_unique<ClothNode>(cloth_node_pos, 3);
 
     system_nodes_.emplace_back(simple_node.get());
     system_nodes_.emplace_back(pendulum_node.get());
-    // system_nodes_.emplace_back(cloth_node.get());
+    system_nodes_.emplace_back(cloth_node.get());
 
     this->AddChild(std::move(simple_node));
     this->AddChild(std::move(pendulum_node));
-    // this->AddChild(std::move(cloth_node));
+    this->AddChild(std::move(cloth_node));
 }
 
 void ScenePhysicsNode::Update(double delta_time) { 

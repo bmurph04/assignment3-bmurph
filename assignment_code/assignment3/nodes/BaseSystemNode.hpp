@@ -21,6 +21,9 @@ class BaseSystemNode : public SceneNode {
     protected:
         std::unique_ptr<ParticleSystemBase> system_;
         ParticleState state_;
+
+        std::shared_ptr<VertexObject> sphere_mesh_;
+        std::shared_ptr<ShaderProgram> shader_;
 };
 
 } // namespace GLOO

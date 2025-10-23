@@ -20,11 +20,7 @@ class SimpleNode : public BaseSystemNode {
         void InitializeSystem();
         void InitializeState(glm::vec3 pos, glm::vec3 vel);  
         void InitializeGeometry();      
-
-    private:
-        std::shared_ptr<VertexObject> sphere_mesh_;
-        std::shared_ptr<ShaderProgram> shader_;
-
+        
 };
 
 } // namespace GLOO

@@ -8,8 +8,7 @@
 #include "objects/SpringObject.hpp"
 
 #include "gloo/SceneNode.hpp"
-#include "gloo/VertexObject.hpp"
-#include "gloo/shaders/ShaderProgram.hpp"
+
 
 namespace GLOO {
 
@@ -28,10 +27,6 @@ class PendulumNode : public BaseSystemNode {
         void ExtendPendulum(float mass, glm::vec3 position, glm::vec3 velocity, float k, float r, bool fixed = false);
     
     private:
-        // std::vector<SceneNode*> particle_nodes;
-        std::shared_ptr<VertexObject> sphere_mesh_;
-        std::shared_ptr<ShaderProgram> shader_;
-
         std::vector<SceneNode*> sphere_nodes_;
         size_t num_particles_;
 
