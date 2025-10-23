@@ -11,9 +11,6 @@ namespace GLOO {
 
 PendulumNode::PendulumNode(size_t num_particles) : num_particles_(num_particles){ 
 
-    // Initialize the system for the pendulum node
-    system_ = make_unique<PendulumSystem>();
-
     // Create geometry
     sphere_mesh_ = PrimitiveFactory::CreateSphere(0.2f, 25, 25);
     shader_ = std::make_shared<PhongShader>();
@@ -24,24 +21,21 @@ PendulumNode::PendulumNode(size_t num_particles) : num_particles_(num_particles)
 }
 
 void PendulumNode::InitializeSystem() {
+    // Initialize the system for the pendulum node
+    system_ = make_unique<PendulumSystem>();
+    
     // Initialize particles in pendulum system with default properties, reachable by index
     float mass = 1;
     float k = 0.5;
     float r = 0.5;
 
     for (size_t i = 0; i < num_particles_; i++){
-        // If at root, just create first root particle and set fixed to true
-        if (i == 0){
-            auto root_particle = PendulumParticle{mass, true};
-            particles_.push_back(root_particle);
-            continue;
-        }
-        else {
-            // Call ExtendPendulum
-            // ExtendPendulum(mass, position, velocity);
-        }
+        PendulumParticle new_particle{mass, false};
+        // If at root, set fixed to true
+        if (i == 0)
+            new_particle.fixed = true;
 
-        // position.y -= 5.0f;
+        particles_.push_back(new_particle);
     }
 
 }
@@ -68,7 +62,7 @@ void PendulumNode::InitializeState() {
 
 }
 
-void PendulumNode::ExtendPendulum(float mass, glm::vec3 position, glm::vec3 velocity, bool fixed) {
+void PendulumNode::ExtendPendulum(float mass, glm::vec3 position, glm::vec3 velocity, float k, float r, bool fixed) {
     // // Assuming a linear chain as in the sample solution where each particle has at most one parent and one child.
 
     // // Create a particle
@@ -81,6 +75,8 @@ void PendulumNode::ExtendPendulum(float mass, glm::vec3 position, glm::vec3 velo
 
 }
 
-void PendulumNode::Update(double delta_time) { }
-
+void PendulumNode::Update(double delta_time) { 
+    
 }
+
+} // namespace GLOO

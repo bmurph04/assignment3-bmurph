@@ -12,6 +12,8 @@
 
 #include <vector>
 
+#include <glm/gtx/string_cast.hpp>
+
 // // might not be needed
 // #include "ParticleSystemBase.hpp"
 // #include "SimpleSystem.hpp"
@@ -33,15 +35,15 @@ ScenePhysicsNode::ScenePhysicsNode(IntegratorType integrator_type, float step, d
 void ScenePhysicsNode::InitializeSystemNodes() {
     // Initialize the systems that will be displayed in the scene as nodes
     auto simple_node = make_unique<SimpleNode>();
-    // auto pendulum_node = make_unique<PendulumNode>();
+    auto pendulum_node = make_unique<PendulumNode>(2);
     // auto cloth_node = make_unique<ClothNode>();
 
     system_nodes_.emplace_back(simple_node.get());
-    // system_nodes_.emplace_back(pendulum_node);
-    // system_nodes_.emplace_back(cloth_node);
+    system_nodes_.emplace_back(pendulum_node.get());
+    // system_nodes_.emplace_back(cloth_node.get());
 
     this->AddChild(std::move(simple_node));
-    // this->AddChild(std::move(pendulum_node));
+    this->AddChild(std::move(pendulum_node));
     // this->AddChild(std::move(cloth_node));
 }
 
