@@ -21,8 +21,8 @@ class ScenePhysicsNode : public SceneNode {
 
         void Update(double delta_time) override;
 
-        static const float g_ = 9.81;
-        static const float b_ = 2.58;
+        static const glm::vec3 g;
+        static const float b;
     
     private:
         std::vector<BaseSystemNode*> system_nodes_;

@@ -17,7 +17,9 @@ class PendulumSystem : public ParticleSystemBase {
         std::vector<PendulumSpring>& GetSprings() { return springs_; }
 
         ParticleState ComputeTimeDerivative(const ParticleState& state, float time) const override;
-        //ParticleState ComputeAcceleration();
+        
+        std::vector<glm::vec3> ComputeVelocity(const ParticleState& state) const;
+        std::vector<glm::vec3> ComputeAcceleration(const ParticleState& state) const;
     
     private:
         std::vector<PendulumParticle> particles_;

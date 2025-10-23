@@ -40,8 +40,8 @@ void PendulumNode::InitializeSystem() {
     }
 
     // Initialize springs in pendulum system with default properties, reachable by index
-    float k = 0.5;
-    float r = 0.5;
+    float k = 20;
+    float r = 1;
     for (size_t i = 0; i < num_particles_-1; i++){
         PendulumSpring new_spring{i, i+1, k, r};
         this->GetSystem()->GetSprings().push_back(new_spring);

@@ -23,6 +23,9 @@
 
 namespace GLOO {
 
+const glm::vec3 ScenePhysicsNode::g = {0.0f, -9.81f, 0.0f};
+const float ScenePhysicsNode::b = 2.58;
+
 ScenePhysicsNode::ScenePhysicsNode(IntegratorType integrator_type, float step, double time_since_update, double time_accumulated) 
     : SceneNode(), step_(step), time_since_start_(time_since_update), time_accumulated_(time_accumulated) {
     

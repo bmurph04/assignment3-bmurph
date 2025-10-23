@@ -32,8 +32,8 @@ void SimpleNode::InitializeState() {
     std::vector<glm::vec3> simple_state_positions(1);
     std::vector<glm::vec3> simple_state_velocities(1);
 
-    glm::vec3 position = glm::vec3(0.5f, 0.75f, 0.5f);
-    glm::vec3 velocity = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 position = {0.5f, 0.75f, 0.5f};
+    glm::vec3 velocity = {0.0f, 0.0f, 0.0f};
     
     simple_state_positions.at(0) = position;
     simple_state_velocities.at(0) = velocity;
