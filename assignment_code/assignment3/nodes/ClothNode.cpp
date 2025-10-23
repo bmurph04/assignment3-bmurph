@@ -45,6 +45,27 @@ void ClothNode::InitializeSystem(float mass, float k, float r) {
             new_particle.fixed = true;
         
         this->GetSystem()->GetParticles().push_back(new_particle);
+
+        // Initialize springs in cloth system with default properties
+
+        // Start with initializing structural springs
+        for (size_t y = 0; y < side_length_-1; y++){
+            for (size_t x = 0; x < side_length_-1; x++){
+                // Get current idx by computing y*side_length_+x
+                size_t idx = y*side_length_+x;
+
+                // Structural spring between current idx and y*side_length_+(x+1) (x direction)
+                size_t idx_next_x = y*side_length_+(x+1);
+                SpringObject new_structural_spring_x{idx, idx_next_x, k, r};
+
+                // Strucutral spring between current idx and (y+1)*side_length_+x (y direction)
+                size_t idx_next_y = (y+1)*side_length_+x;
+                SpringObject new_structural_spring_y{idx, idx_next_y, k, r};
+
+                this->GetSystem()->GetSprings().push_back(new_structural_spring_x);
+                this->GetSystem()->GetSprings().push_back(new_structural_spring_y);
+            }
+        }
     }
 
 }
@@ -57,7 +78,6 @@ void ClothNode::InitializeState(float mass, float k, float r, glm::vec3 pos, glm
     // vector of size num_particles for the particles in the system
     std::vector<glm::vec3> state_positions(num_particles_);
     std::vector<glm::vec3> state_velocities(num_particles_);
-    std::cout << "num_particles: " << num_particles_ << std::endl;
 
     // Treat the positions and velocities as a 2D array, indexed by y*side_length_ + x
     for (size_t y = 0; y < side_length_; y++) {
