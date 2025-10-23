@@ -97,6 +97,14 @@ void ClothNode::InitializeGeometry() {
 }
 
 void ClothNode::Update(double delta_time) {
+    // Update function of ScenePhysicsNode for integrator has been run
+    // Do specific ClothNode update behavior
+    for (size_t i = 0; i < sphere_nodes_.size(); i++){
+        glm::vec3 position = state_.positions.at(i);
+        SceneNode* sphere_node = sphere_nodes_.at(i);
+
+        sphere_node->GetTransform().SetPosition(position);
+    }
 
 }
 
