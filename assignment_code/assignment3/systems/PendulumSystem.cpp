@@ -89,7 +89,7 @@ std::vector<glm::vec3> PendulumSystem::ComputeAcceleration(const ParticleState& 
         
         // Compute the spring force between particles 1 and 2
         glm::vec3 d = particle1_position - particle2_position;
-        glm::vec3 spring_force = -spring.k * (d.length() - spring.r) * glm::normalize(d);
+        glm::vec3 spring_force = -spring.k * (glm::length(d) - spring.r) * d/glm::length(d);
 
         // Add spring force / mass to particle 1 accelerations
         if (!particle1.fixed)
