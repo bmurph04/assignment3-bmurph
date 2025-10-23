@@ -13,6 +13,8 @@
 #include <glm/gtx/string_cast.hpp>
 
 namespace GLOO {
+
+const float ClothNode::b = 0.1f;
  
 ClothNode::ClothNode(glm::vec3 pos, size_t side_length) : side_length_(side_length) {
     // Initialize position and number of particles using parameters
@@ -25,10 +27,10 @@ ClothNode::ClothNode(glm::vec3 pos, size_t side_length) : side_length_(side_leng
     line_shader_ = std::make_shared<SimpleShader>();
 
     float default_mass = 0.1f;
-    float default_k = 1.5f;
-    float default_r = 0.05f;
+    float default_k = 10.0f;
+    float default_r = 0.5f;
     glm::vec3 default_pos = this->GetTransform().GetPosition() + glm::vec3(-0.5f, 0.0f, 0.0f);
-    glm::vec3 default_vel = {0.0f, 0.0f, -3.5f};
+    glm::vec3 default_vel = {0.0f, 0.0f, -3.0f};
 
     InitializeSystem(default_mass, default_k, default_r);
     InitializeState(default_mass, default_k, default_r, default_pos, default_vel);
@@ -44,13 +46,16 @@ void ClothNode::InitializeSystem(float mass, float k, float r) {
     for (size_t i = 0; i < num_particles_; i++){
         ParticleObject new_particle{mass, false};
         // If at a particle in the first row, set fixed to true. Row major indexing will be used later
-        if (i < side_length_)
-            new_particle.fixed = true;
+        if (i < side_length_) {
+            ///new_particle.fixed = true;
+        }
         
         this->GetSystem()->GetParticles().push_back(new_particle);
     }
 
     // Initialize springs in cloth system with default properties
+    float shear_r = r * sqrt(2.0f);
+    float flexion_r = r * 2.0f;
 
     // Start with initializing structural springs
     for (size_t y = 0; y < side_length_; y++){
@@ -90,7 +95,7 @@ void ClothNode::InitializeSystem(float mass, float k, float r) {
             // Create a shear spring between current and bottom left particle if it exists
             if ((x-1) >= 0 && (y+1) < int(side_length_)) {
                 size_t idx_left = (y+1)*side_length_+(x-1);
-                SpringObject new_shear_spring{idx, idx_left, k, r};
+                SpringObject new_shear_spring{idx, idx_left, k, shear_r};
                 this->GetSystem()->GetSprings().push_back(new_shear_spring);
                 std::cout << "Shear spring created between " << idx << " and " << idx_left << std::endl;
             }
@@ -98,7 +103,7 @@ void ClothNode::InitializeSystem(float mass, float k, float r) {
             // Create a shear spring between current and bottom right particle if it exists
             if ((x+1) < int(side_length_) && (y+1) < int(side_length_)) {
                 size_t idx_right = (y+1)*side_length_+(x+1);
-                SpringObject new_shear_spring{idx, idx_right, k, r};
+                SpringObject new_shear_spring{idx, idx_right, k, shear_r};
                 this->GetSystem()->GetSprings().push_back(new_shear_spring);
                 std::cout << "Shear spring created between " << idx << " and " << idx_right << std::endl;
             }
@@ -116,7 +121,7 @@ void ClothNode::InitializeSystem(float mass, float k, float r) {
             // Create a flexion spring between current and right particle if it exists
             if (x < side_length_-2){
                 size_t idx_right = y*side_length_+(x+2);
-                SpringObject new_flexion_spring{idx, idx_right, k, r};
+                SpringObject new_flexion_spring{idx, idx_right, k, flexion_r};
                 this->GetSystem()->GetSprings().push_back(new_flexion_spring);
                 std::cout << "Flexion spring created between " << idx << " and " << idx_right << std::endl;
             }
@@ -124,7 +129,7 @@ void ClothNode::InitializeSystem(float mass, float k, float r) {
             // Create a flexion spring between current and right particle if it exists
             if (y < side_length_-2){
                 size_t idx_down = (y+2)*side_length_+x;
-                SpringObject new_flexion_spring{idx, idx_down, k, r};
+                SpringObject new_flexion_spring{idx, idx_down, k, flexion_r};
                 this->GetSystem()->GetSprings().push_back(new_flexion_spring);
                 std::cout << "Flexion spring created between " << idx << " and " << idx_down << std::endl;
             }
@@ -147,21 +152,19 @@ void ClothNode::InitializeState(float mass, float k, float r, glm::vec3 pos, glm
     // Treat the positions and velocities as a 2D array, indexed by y*side_length_ + x
     for (size_t y = 0; y < side_length_; y++) {
         
-        float mass_below = mass * ((side_length_-1) - y);
-
         for (size_t x = 0; x < side_length_; x++) {
             size_t state_idx = y * side_length_ + x;
 
-            float mass_right = mass * ((side_length_-1) - x);
-
             state_positions.at(state_idx) = pos;
             state_velocities.at(state_idx) = vel;
-            pos.x += r + (mass_right*g/k);
+            pos.x += r;
         }
         
         pos.x = default_x;
+
+        float vertical_stretch = (mass * float(side_length_ * side_length_) * g) / (side_length_ * (side_length_-1) * k);
         // New vertical equilibrium length is x = r + mg/k. Use this to set the initial points at an equilibrium length
-        pos.y -= r + (mass_below*g/k);
+        pos.y -= (r + vertical_stretch);
 
         vel.z -= 0.5f;
     }

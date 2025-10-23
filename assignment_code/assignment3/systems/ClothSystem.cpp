@@ -1,5 +1,5 @@
 #include "ClothSystem.hpp"
-
+#include "nodes/ClothNode.hpp"
 #include "nodes/ScenePhysicsNode.hpp"
 #include "objects/ParticleObject.hpp"
 #include "objects/SpringObject.hpp"
@@ -68,7 +68,7 @@ std::vector<glm::vec3> ClothSystem::ComputeAcceleration(const ParticleState& sta
         // Compute gravity
         glm::vec3 grav_force = particle.mass * ScenePhysicsNode::g;
         // Compute drag force
-        glm::vec3 drag_force = -10.0f * velocity;
+        glm::vec3 drag_force = -ClothNode::b * velocity;
         
         // Add to accelerations at idx i (for particle i). Spring force not yet computed
         accelerations.at(i) = (grav_force + drag_force) / particle.mass;

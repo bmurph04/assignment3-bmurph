@@ -19,6 +19,8 @@ class ClothNode : public BaseSystemNode {
         void InitializeGeometry();
 
         void PlotWireframe();
+
+        static const float b;
     
     private:
         std::shared_ptr<ShaderProgram> line_shader_;
